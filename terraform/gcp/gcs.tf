@@ -14,8 +14,9 @@ resource "google_storage_bucket" "terragoat_website" {
   }
 }
 
-resource "google_storage_bucket_iam_binding" "allow_public_read" {
-  bucket  = google_storage_bucket.terragoat_website.id
-  members = ["allUsers"]
-  role    = "roles/storage.objectViewer"
-}
+# Removed public access IAM binding for security compliance
+# resource "google_storage_bucket_iam_binding" "allow_public_read" {
+#   bucket  = google_storage_bucket.terragoat_website.id
+#   members = ["allUsers"]
+#   role    = "roles/storage.objectViewer"
+# }
