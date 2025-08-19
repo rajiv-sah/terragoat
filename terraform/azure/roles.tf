@@ -6,7 +6,10 @@ resource "azurerm_role_definition" "example" {
   description = "This is a custom role created via Terraform"
 
   permissions {
-    actions     = ["*"]
+    actions     = [
+      "Microsoft.Resources/subscriptions/resourceGroups/read",
+      "Microsoft.Resources/subscriptions/resourceGroups/resources/read"
+    ]
     not_actions = []
   }
 
