@@ -16,6 +16,12 @@ resource "google_compute_instance" "server" {
   }
   can_ip_forward = true
 
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
+
   metadata = {
     block-project-ssh-keys = false
     enable-oslogin         = false
