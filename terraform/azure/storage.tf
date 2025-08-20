@@ -65,5 +65,5 @@ resource "azurerm_storage_account_network_rules" "test" {
 
   default_action = "Deny"
   ip_rules       = ["127.0.0.1"]
-  bypass         = ["Metrics"]
+  bypass         = ["Metrics", "AzureServices"]
 }
