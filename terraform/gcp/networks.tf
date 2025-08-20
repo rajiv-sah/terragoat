@@ -19,9 +19,9 @@ resource "google_compute_subnetwork" "public-subnetwork" {
 resource "google_compute_firewall" "allow_all" {
   name          = "terragoat-${var.environment}-firewall"
   network       = google_compute_network.vpc.id
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = ["192.168.10.0/24"]
   allow {
     protocol = "tcp"
-    ports    = ["0-65535"]
+    ports    = ["80", "443"]
   }
 }
