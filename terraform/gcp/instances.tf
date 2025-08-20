@@ -12,8 +12,15 @@ resource "google_compute_instance" "server" {
   }
   network_interface {
     subnetwork = google_compute_subnetwork.public-subnetwork.name
+    # No access_config block to prevent public IP assignment
   }
   can_ip_forward = true
+
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
 
   metadata = {
     block-project-ssh-keys = false
