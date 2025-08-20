@@ -77,7 +77,7 @@ resource azurerm_network_security_group "bad_sg" {
     name                       = "AllowSSH"
     priority                   = 200
     protocol                   = "TCP"
-    source_address_prefix      = "*"
+    source_address_prefix      = "10.0.0.0/8"
     source_port_range          = "*"
     destination_port_range     = "22-22"
     destination_address_prefix = "*"
