@@ -26,6 +26,11 @@ resource "azurerm_storage_account" "example" {
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  
+  customer_managed_key {
+    key_vault_key_id          = azurerm_key_vault_key.storage_key.id
+    user_assigned_identity_id = azurerm_user_assigned_identity.storage_identity.id
+  }
   queue_properties {
     logging {
       delete                = false
@@ -58,6 +63,67 @@ resource "azurerm_storage_account" "example" {
     yor_trace            = "23861ff4-c42d-495e-80ac-776c74035f43"
   }
 }
+
+# User Assigned Identity for storage account encryption
+resource "azurerm_user_assigned_identity" "storage_identity" {
+  name                = "storage-encryption-identity-${var.environment}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+# Key Vault for customer-managed keys
+resource "azurerm_key_vault" "storage_vault" {
+  name                = "storage-kv-${var.environment}-${random_integer.rnd_int.result}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "standard"
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = azurerm_user_assigned_identity.storage_identity.principal_id
+
+    key_permissions = [
+      "Get",
+      "UnwrapKey",
+      "WrapKey"
+    ]
+  }
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Create",
+      "Delete",
+      "Get",
+      "Purge",
+      "Recover",
+      "Update"
+    ]
+  }
+}
+
+# Key Vault Key for storage encryption
+resource "azurerm_key_vault_key" "storage_key" {
+  name         = "storage-encryption-key"
+  key_vault_id = azurerm_key_vault.storage_vault.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
+}
+
+# Data source for current Azure client configuration
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_storage_account_network_rules" "test" {
   resource_group_name  = azurerm_resource_group.example.name
