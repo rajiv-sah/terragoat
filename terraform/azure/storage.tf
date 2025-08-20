@@ -26,6 +26,11 @@ resource "azurerm_storage_account" "example" {
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  
+  customer_managed_key {
+    key_vault_key_id          = azurerm_key_vault_key.storage_key.id
+    user_assigned_identity_id = azurerm_user_assigned_identity.storage_identity.id
+  }
   queue_properties {
     logging {
       delete                = false
