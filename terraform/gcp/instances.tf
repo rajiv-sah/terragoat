@@ -9,6 +9,9 @@ resource "google_compute_instance" "server" {
       image = "debian-cloud/debian-9"
     }
     auto_delete = true
+    disk_encryption_key {
+      raw_key = var.disk_encryption_key
+    }
   }
   network_interface {
     subnetwork = google_compute_subnetwork.public-subnetwork.name
@@ -35,6 +38,9 @@ resource "google_compute_instance" "server" {
 
 resource "google_compute_disk" "unencrypted_disk" {
   name = "terragoat-${var.environment}-disk"
+  disk_encryption_key {
+    raw_key = var.disk_encryption_key
+  }
   labels = {
     git_commit           = "2bdc0871a5f4505be58244029cc6485d45d7bb8e"
     git_file             = "terraform__gcp__instances_tf"
