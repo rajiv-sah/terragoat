@@ -7,6 +7,11 @@ resource "google_sql_database_instance" "master_instance" {
     tier = "db-f1-micro"
     ip_configuration {
       ipv4_enabled = false
+      authorized_networks {
+        name  = "internal-network"
+        value = "10.0.0.0/8"
+      }
+      require_ssl = true
     }
     backup_configuration {
       enabled = false
