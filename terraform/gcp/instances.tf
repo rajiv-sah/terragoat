@@ -9,7 +9,9 @@ resource "google_compute_instance" "server" {
       image = "debian-cloud/debian-9"
     }
     auto_delete = true
-    disk_encryption_key_raw = base64encode("SGVsbG8gZnJvbSBHb29nbGUgQ2xvdWQgUGxhdGZvcm0=")
+    disk_encryption_key {
+      raw_key = base64encode("SGVsbG8gZnJvbSBHb29nbGUgQ2xvdWQgUGxhdGZvcm0=")
+    }
   }
   network_interface {
     subnetwork = google_compute_subnetwork.public-subnetwork.name
