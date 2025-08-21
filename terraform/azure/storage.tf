@@ -26,6 +26,7 @@ resource "azurerm_storage_account" "example" {
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  allow_nested_items_to_be_public = false
   
   customer_managed_key {
     key_vault_key_id          = azurerm_key_vault_key.example.id
