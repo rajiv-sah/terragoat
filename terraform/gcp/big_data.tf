@@ -6,7 +6,7 @@ resource "google_sql_database_instance" "master_instance" {
   settings {
     tier = "db-f1-micro"
     ip_configuration {
-      ipv4_enabled = true
+      ipv4_enabled = false
     }
     backup_configuration {
       enabled = false
