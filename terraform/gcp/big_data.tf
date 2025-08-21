@@ -8,6 +8,10 @@ resource "google_sql_database_instance" "master_instance" {
     ip_configuration {
       ipv4_enabled = false
       require_ssl = true
+      authorized_networks {
+        name  = "internal-only"
+        value = "0.0.0.0/32"  # No public access
+      }
     }
     backup_configuration {
       enabled = false
