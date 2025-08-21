@@ -15,6 +15,12 @@ resource "google_compute_instance" "server" {
   }
   can_ip_forward = true
 
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
+
   metadata = {
     block-project-ssh-keys = false
     enable-oslogin         = false
@@ -34,6 +40,9 @@ resource "google_compute_instance" "server" {
 
 resource "google_compute_disk" "unencrypted_disk" {
   name = "terragoat-${var.environment}-disk"
+  disk_encryption_key {
+    raw_key = var.disk_encryption_key
+  }
   labels = {
     git_commit           = "2bdc0871a5f4505be58244029cc6485d45d7bb8e"
     git_file             = "terraform__gcp__instances_tf"
