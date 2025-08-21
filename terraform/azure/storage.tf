@@ -6,7 +6,7 @@ resource "azurerm_managed_disk" "example" {
   create_option        = "Empty"
   disk_size_gb         = 1
   encryption_settings {
-    enabled = false
+    enabled = true
   }
   tags = {
     git_commit           = "d68d2897add9bc2203a5ed0632a5cdd8ff8cefb0"
@@ -26,6 +26,13 @@ resource "azurerm_storage_account" "example" {
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.example.id]
+  }
+  
+  infrastructure_encryption_enabled = true
   
   customer_managed_key {
     key_vault_key_id          = azurerm_key_vault_key.example.id
