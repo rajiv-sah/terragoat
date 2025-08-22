@@ -130,7 +130,7 @@ resource azurerm_network_watcher_flow_log "flow_log" {
   storage_account_id        = azurerm_storage_account.example.id
   retention_policy {
     enabled = true
-    days    = 365
+    days    = 91
   }
   tags = {
     git_commit           = "898d5beaec7ffdef6df0d7abecff407362e2a74e"

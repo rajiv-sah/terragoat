@@ -43,6 +43,8 @@ resource "google_compute_instance" "server" {
 
 resource "google_compute_disk" "unencrypted_disk" {
   name = "terragoat-${var.environment}-disk"
+  type = "pd-standard"
+  zone = data.google_compute_zones.zones.names[0]
   
   disk_encryption_key {
     raw_key = base64encode("SGVsbG8gZnJvbSBHb29nbGUgQ2xvdWQgUGxhdGZvcm0=")
