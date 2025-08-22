@@ -4,6 +4,7 @@ resource "google_storage_bucket" "terragoat_website" {
   force_destroy = true
   
   uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
   
   labels = {
     git_commit           = "2bdc0871a5f4505be58244029cc6485d45d7bb8e"
